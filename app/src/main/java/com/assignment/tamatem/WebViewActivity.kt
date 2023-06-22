@@ -30,6 +30,8 @@ class WebViewActivity : AppCompatActivity() {
             settings.domStorageEnabled = true
             settings.javaScriptEnabled = true
 
+
+
             webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(
                     view: WebView?,
@@ -50,6 +52,11 @@ class WebViewActivity : AppCompatActivity() {
                     super.onPageFinished(view, url)
                 }
 
+                override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
+                    updateNavigationButtonsState()
+                    super.doUpdateVisitedHistory(view, url, isReload)
+                }
+
                 override fun onReceivedError(
                     view: WebView,
                     request: WebResourceRequest,
@@ -64,6 +71,11 @@ class WebViewActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun updateNavigationButtonsState() {
+        binding.enableBack = binding.webView.canGoBack()
+        binding.enableForward = binding.webView.canGoForward()
     }
 
     private fun initListener() {
